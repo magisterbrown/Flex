@@ -1,13 +1,25 @@
 :root{
---mainRed: #DC3545;
+    --mainRed: #DC3545;
 }
 .start{
-position:relative;
-width:173px;
-height:300px;
-margin:auto;
-background-color: var(--mainRed);
+    position:relative;
+    width:173px;
+    height:300px;
+    margin:auto;
+    background-color: var(--mainRed);
 }
 .start:before, .start:after{
-content: "";
+    content: "";
+    position: absolute;
+    height:0;
+    border-top: 150px solid transparent;
+    border-bottom: 150px solid transparent;
+}
+.start:before {
+    border-left: 86.6px solid var(--mainRed);
+    left:100%;
+}
+.start:after{
+    border-right: 86.6px solid var(--mainRed);
+    right:100%;
 }
