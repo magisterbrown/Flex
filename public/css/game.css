@@ -1,0 +1,13 @@
+:root{
+    --mainRed: #4e2f32;
+}
+.A1{
+position: relative;
+width:173px;
+height:300px;
+margin:auto;
+background-color: var(--mainRed);
+}
+.start:before, .start:after{
+content: "";
+}
