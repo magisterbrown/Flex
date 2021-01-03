@@ -3,7 +3,7 @@
 }
 .start{
     position:relative;
-    width:173px;
+    width:200px;
     height:300px;
     margin:auto;
     background-color: var(--mainRed);
@@ -22,4 +22,11 @@
 .start:after{
     border-right: 86.6px solid var(--mainRed);
     right:100%;
+}
+.play{
+    text-align: center;
+    line-height: 300px;
+    font-family: 'Roboto Mono';
+    font-size: 83px;
+    color: #FFF;
 }
