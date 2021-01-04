@@ -4,7 +4,7 @@
 .start{
     position:relative;
     width:200px;
-    height:300px;
+    height:280px;
     margin:auto;
     background-color: var(--mainRed);
 }
@@ -12,8 +12,8 @@
     content: "";
     position: absolute;
     height:0;
-    border-top: 150px solid transparent;
-    border-bottom: 150px solid transparent;
+    border-top: 140px solid transparent;
+    border-bottom: 140px solid transparent;
 }
 .start:before {
     border-left: 86.6px solid var(--mainRed);
@@ -25,7 +25,7 @@
 }
 .play{
     text-align: center;
-    line-height: 300px;
+    line-height: 280px;
     font-family: 'Roboto Mono';
     font-size: 83px;
     color: #FFF;
@@ -46,6 +46,8 @@
 }
 .circuit {
     position: absolute;
-    width:100%;
-    height:100%;
+    margin:auto;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
 }
