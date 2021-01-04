@@ -14,7 +14,11 @@ body {
     background: #2a535e;
 }
 
-
+.intro {
+  text-align: center;
+  font-family: monospace;
+  font-size: 100px;
+}
 
 .space {
     display: inline-block;
@@ -31,6 +35,7 @@ body {
 
 .grid{
     height: 190px;
+    text-align: center;
 }
 
 
