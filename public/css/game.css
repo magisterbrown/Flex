@@ -5,7 +5,9 @@
 }
 
 :root {
-    --hexagon-width: 100px;
+    --hexagon_s: 20px;
+    --position_y: calc(-127/100*var(--hexagon_s));
+    --position_x: calc(-137/100*var(--hexagon_s));
 }
 
 body {
@@ -17,8 +19,10 @@ body {
 .space {
     display: inline-block;
     position: relative;
-    width: 84px;
-    height: 180px;
+    margin-left: calc(42/100*calc(1.732*var(--hexagon_s)));
+    margin-top: calc(140/100*var(--hexagon_s));
+    height: 0px;
+    width: 0px;
 }
 
 .newline {
@@ -32,22 +36,21 @@ body {
 
 .hex4{
     display: inline-block;
-    width: 53.4px;
-  height: 10px;
+    width: 0px;
+  height: 0px;
   margin: 0 auto;
   position: relative;
-  margin-right: 60px;
-  margin-top: 140px;
-  margin-left:60px;
+  margin-top: calc(140/100*var(--hexagon_s));
+  margin-left:calc(1.632*var(--hexagon_s));
   
   
   
 }
 .h1{
-    top: -110px;
-    left: -24px;
-    width: 100px;
-    height: 173.2px;
+    top: var(--position_y);
+    left: var(--position_x);
+    width: var(--hexagon_s);
+    height: calc(1.732*var(--hexagon_s));
     background-color: #6C6;
     position: absolute;
     cursor: pointer;
@@ -56,11 +59,11 @@ body {
   }
   
   .h2{
-    top: -110px;
-    left: -24px;
+    top: var(--position_y);
+    left: var(--position_x);
     position: absolute;
-    width: 100px;
-    height: 173.2px;
+    width: var(--hexagon_s);
+    height: calc(1.732*var(--hexagon_s));
     background-color: #6C6;
     
     transform: rotate(90deg);
@@ -69,11 +72,11 @@ body {
   }
   
   .h3{
-    top: -110px;
-    left: -24px;
+    top: var(--position_y);
+    left: var(--position_x);
     position: absolute;
-    width: 100px;
-    height: 173.2px;
+    width: var(--hexagon_s);
+    height: calc(1.732*var(--hexagon_s));
     
     background-color: #6C6;
     transform: rotate(-30deg);
