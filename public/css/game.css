@@ -11,13 +11,14 @@
 }
 
 body {
-    background: #2a535e;
+    background: url(https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnutsaboutwine.ie%2Fwp-content%2Fuploads%2F2017%2F05%2Fbaltika-9.jpg&f=1&nofb=1)no-repeat #152d33;
 }
 
 .intro {
   text-align: center;
   font-family: monospace;
   font-size: 100px;
+  color: #2f95c5;
 }
 
 .space {
@@ -51,39 +52,39 @@ body {
   
   
 }
-.h1{
+.h1 {
     top: var(--position_y);
     left: var(--position_x);
     width: var(--hexagon_s);
     height: calc(1.732*var(--hexagon_s));
-    background-color: #6C6;
+    background-color: rgb(255,0,0);
     position: absolute;
     cursor: pointer;
     transform: rotate(30deg);
     
   }
   
-  .h2{
+  .h2 {
     top: var(--position_y);
     left: var(--position_x);
     position: absolute;
     width: var(--hexagon_s);
     height: calc(1.732*var(--hexagon_s));
-    background-color: #6C6;
+    background-color: rgb(255,0,0);
     
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     cursor: pointer;
   }
   
-  .h3{
+  .h3 {
     top: var(--position_y);
     left: var(--position_x);
     position: absolute;
     width: var(--hexagon_s);
     height: calc(1.732*var(--hexagon_s));
     
-    background-color: #6C6;
+    background-color:rgb(255,0,0); 
     transform: rotate(-30deg);
     -webkit-transform: rotate(-30deg);
     cursor: pointer;
