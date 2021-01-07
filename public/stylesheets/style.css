@@ -1,8 +1,73 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+:root{
+    --mainRed: #DC3545;
 }
-
-a {
-  color: #00B7FF;
+.start{
+    position:relative;
+    width:200px;
+    height:280px;
+    margin:auto;
+    background-color: var(--mainRed);
+}
+.start:before, .start:after{
+    content: "";
+    position: absolute;
+    height:0;
+    border-top: 140px solid transparent;
+    border-bottom: 140px solid transparent;
+}
+.start:before {
+    border-left: 86.6px solid var(--mainRed);
+    left:100%;
+}
+.start:after{
+    border-right: 86.6px solid var(--mainRed);
+    right:100%;
+}
+.play{
+    text-align: center;
+    line-height: 280px;
+    font-family: 'Roboto Mono';
+    font-size: 83px;
+    color: #FFF;
+}
+.container{
+    position: relative;
+    width:100%;
+    height:100%;
+    background-image: url("https://g1.dcdn.lt/images/pix/jano-matejkos-paveikslas-zalgirio-musis-83563523.jpg");
+}
+.hexagon{
+}
+.title{
+    position:absolute;
+    top: calc(50% - 500px);
+    font-family: 'Audiowide', cursive;
+    font-size: 120px;
+}
+.circuit {
+}
+.buter{
+    top: calc(50% - 200px);
+}
+.centring{
+    position:absolute;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+footer{
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    
+}
+.info{
+    display:inline-block;
+    height:50px;
+    margin:20px;
+    font-family: 'Audiowide', cursive;
+    font-size:30px;
+}
+.bar{
+    top: calc(50% + 130px);
 }
