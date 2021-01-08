@@ -29,12 +29,8 @@ function change_color(id) {
     }
     
 }
-var hexes = document.getElementsByClassName("h1");
-hexes[0].onclick = function() {
-    alert(5445);
-};
-for(var i = 0;i < hexes.length;i++){
-    hexes[i].onclick = function() {
-        alert(5445);
-    };
-}
+
+
+var i;
+var hexagon = document.createElement("hex4").className("hex4");
+document.body.append(hexagon);
