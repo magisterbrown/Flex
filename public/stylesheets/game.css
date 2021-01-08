@@ -42,7 +42,7 @@ body {
 
 .hex4{
     display: inline-block;
-    width: 0px;
+    width: 4px;
   height: 0px;
   margin: 0 auto;
   position: relative;
