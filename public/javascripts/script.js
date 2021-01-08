@@ -1,3 +1,7 @@
+function redirect(id){
+    window.location.replace("/game");
+}
+
 var c = document.getElementsByClassName("circuit")[0];
 let combi = new Combiner(c,960,650);
 
