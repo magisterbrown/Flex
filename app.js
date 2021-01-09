@@ -8,7 +8,8 @@ var app = express();
 var active = 0;
 var completed = 0;
 var ids = 0;
-var games = new Map();
+var games = []; 
+let queue = null;
 
 app.use(express.static(__dirname + "/public"));
 http.createServer(app).listen(port);
@@ -24,25 +25,29 @@ app.get("/game",function (req,res) {
 const server = http.createServer(app);
 const wss = new websocket.Server({ server });
 wss.on("connection", function (ws) {
+
      ws.on("message", function incoming(message) {
-        if(message == "start"){
+        message = JSON.parse(message);
+        if(message.type == "start"){
+            console.log(active);
             ws.player = new Player();
-            active++;
+            if(queue == null){
+                queue = new Game(ws);
+            }
+            else{
+                queue.addPlayer(ws);
+                queue = null;
+                active++;
+            }
             let mess = new Message("active",active);
             sendActive(wss,websocket,mess);
         }
-        if(message == "currgames"){
+        if(message.type == "currgames"){
             let mass = new Message("active", active);
             ws.send(JSON.stringify(mass));
         }
      });
-     ws.on("close", function incoming() {
-         if(ws.player != null){
-            active--;
-            let mess = new Message("active",active);
-            sendActive(wss,websocket,mess);
-         }
-        });
+  
 });
 function sendActive(wss,WebSocket,data){
         wss.clients.forEach(function each(client) {
@@ -58,5 +63,14 @@ function Message(type,data){
 }
 function Player(){
 
+}
+function Game(ws){
+   this.creator = ws;
+    this.move = "creator";
+    ws.game = this;
+    this.addPlayer = function(ws){
+        this.participant = ws;
+        ws.game = this;
+    }
 }
 server.listen(3001);
