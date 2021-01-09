@@ -120,5 +120,4 @@ socket.onopen = function(e) {
       socket.send("start");
 };
 socket.onmessage = function(event){
-    alert("jo");
 };        

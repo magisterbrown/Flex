@@ -31,6 +31,10 @@ wss.on("connection", function (ws) {
             let mess = new Message("active",active);
             sendActive(wss,websocket,mess);
         }
+        if(message == "currgames"){
+            let mass = new Message("active", active);
+            ws.send(JSON.stringify(mass));
+        }
      });
      ws.on("close", function incoming() {
          if(ws.player != null){

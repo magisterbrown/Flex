@@ -88,6 +88,9 @@ function Point(xpos,ypos){
 }
 var games = document.getElementById("games");
 const socket = new WebSocket("ws://localhost:3001");
+socket.onopen = function(event){
+    socket.send("currgames");
+}
 socket.onmessage = function(event){
     let resp = JSON.parse(event.data);
     if(resp.type = "active"){
