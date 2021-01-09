@@ -1,3 +1,5 @@
+
+
 function redirect(id){
     window.location.replace("/game");
 }
@@ -84,3 +86,11 @@ function Point(xpos,ypos){
         this.y=point.getY()-this.y;
     };
 }
+var games = document.getElementById("games");
+const socket = new WebSocket("ws://localhost:3001");
+socket.onmessage = function(event){
+    let resp = JSON.parse(event.data);
+    if(resp.type = "active"){
+        games.innerHTML = resp.data;
+    }
+};        

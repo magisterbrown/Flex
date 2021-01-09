@@ -113,3 +113,12 @@ document.body.appendChild(grid);
 function give_number(id) {
     
 }
+
+
+const socket = new WebSocket("ws://localhost:3001");
+socket.onopen = function(e) {
+      socket.send("start");
+};
+socket.onmessage = function(event){
+    alert("jo");
+};        
