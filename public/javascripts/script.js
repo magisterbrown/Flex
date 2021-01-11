@@ -86,11 +86,16 @@ function Point(xpos,ypos){
         this.y=point.getY()-this.y;
     };
 }
+function Message(type,data){
+    this.type = type;
+    this.data = data;
+}
 var games = document.getElementById("games");
 const socket = new WebSocket("ws://localhost:3001");
 socket.onopen = function(event){
-    socket.send("currgames");
-}
+    let mess = new Message("currgames",0);
+    socket.send(JSON.stringify(mess));
+    }
 socket.onmessage = function(event){
     let resp = JSON.parse(event.data);
     if(resp.type = "active"){

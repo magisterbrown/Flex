@@ -1,6 +1,25 @@
-
+function Message(type,data){
+    this.type = type;
+    this.data = data;
+}
+const socket = new WebSocket("ws://localhost:3001");
+socket.onopen = function(e) {
+      socket.send(JSON.stringify(new Message("start",0)));
+};
+socket.onclose = function(event){
+    alert("enemy left game");
+    window.location.replace("/");
+};
+socket.onmessage = function(event){
+    let resp = JSON.parse(event.data);
+    if(resp.type == "stop"){
+        alert("enemy left game");
+    }
+};        
 function change_color(id) {
     var x = id;
+
+    
 
     if (x%3 == 0){
         document.getElementById(x).style.backgroundColor = "white";
@@ -115,9 +134,3 @@ function give_number(id) {
 }
 
 
-const socket = new WebSocket("ws://localhost:3001");
-socket.onopen = function(e) {
-      socket.send("start");
-};
-socket.onmessage = function(event){
-};        

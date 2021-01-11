@@ -29,13 +29,13 @@ wss.on("connection", function (ws) {
      ws.on("message", function incoming(message) {
         message = JSON.parse(message);
         if(message.type == "start"){
-            console.log(active);
             ws.player = new Player();
             if(queue == null){
                 queue = new Game(ws);
             }
             else{
                 queue.addPlayer(ws);
+                queue.sate = "full";
                 queue = null;
                 active++;
             }
@@ -47,7 +47,19 @@ wss.on("connection", function (ws) {
             ws.send(JSON.stringify(mass));
         }
      });
-  
+    ws.on("close", function incoming() {
+                 if(ws.game != null){
+                                if(ws.game.creator!=null){
+                                    ws.game.creator.close();
+                                }
+                     if(ws.game.participant != null){
+                        ws.game.participant.close();
+                         active=active-0.5;
+                                 let mess = new Message("active",active);
+                                 sendActive(wss,websocket,mess);
+                     }
+                              }
+                });
 });
 function sendActive(wss,WebSocket,data){
         wss.clients.forEach(function each(client) {
@@ -65,6 +77,7 @@ function Player(){
 
 }
 function Game(ws){
+    this.sate = "waiting";
    this.creator = ws;
     this.move = "creator";
     ws.game = this;
