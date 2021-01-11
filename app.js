@@ -26,14 +26,16 @@ const server = http.createServer(app);
 const wss = new websocket.Server({ server });
 wss.on("connection", function (ws) {
 
-     ws.on("message", function incoming(message) {
+    ws.on("message", function incoming(message) {
         message = JSON.parse(message);
         if(message.type == "start"){
             ws.player = new Player();
             if(queue == null){
+                ws.player.setType("creator");
                 queue = new Game(ws);
             }
             else{
+                ws.player.setType("participant");
                 queue.addPlayer(ws);
                 queue.sate = "full";
                 queue = null;
@@ -46,27 +48,31 @@ wss.on("connection", function (ws) {
             let mass = new Message("active", active);
             ws.send(JSON.stringify(mass));
         }
-     });
+    });
     ws.on("close", function incoming() {
-                 if(ws.game != null){
-                                if(ws.game.creator!=null){
-                                    ws.game.creator.close();
-                                }
-                     if(ws.game.participant != null){
-                        ws.game.participant.close();
-                         active=active-0.5;
-                                 let mess = new Message("active",active);
-                                 sendActive(wss,websocket,mess);
-                     }
-                              }
-                });
+        if(ws.game != null){
+            if(ws.game.sate == "full"){
+                active--;
+                let mess = new Message("active",active);
+                sendActive(wss,websocket,mess);
+                ws.game.sate = "waiting";
+            }
+            if(ws.player.type == "participant"){
+                ws.game.creator.close();
+            }
+            if(ws.player.type == "creator"){
+                ws.game.participant.close();
+            }
+
+        }
+    });
 });
 function sendActive(wss,WebSocket,data){
-        wss.clients.forEach(function each(client) {
-          if (client.readyState === WebSocket.OPEN) {
-                      client.send(JSON.stringify(data));
-          }
-         });
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(data));
+        }
+    });
 }
 
 function Message(type,data){
@@ -74,11 +80,14 @@ function Message(type,data){
     this.data = data;
 }
 function Player(){
-
+    this.type;
+    this.setType = function(type){
+        this.type = type;
+    }
 }
 function Game(ws){
     this.sate = "waiting";
-   this.creator = ws;
+    this.creator = ws;
     this.move = "creator";
     ws.game = this;
     this.addPlayer = function(ws){
