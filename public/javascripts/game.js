@@ -2,6 +2,9 @@ function Message(type,data){
     this.type = type;
     this.data = data;
 }
+
+
+
 const socket = new WebSocket("ws://localhost:3001");
 socket.onopen = function(e) {
       socket.send(JSON.stringify(new Message("start",0)));
@@ -15,37 +18,35 @@ socket.onmessage = function(event){
     if(resp.type == "stop"){
         alert("enemy left game");
     }
-};        
+    if(resp.type == "Inavlid Move"){
+        alert("Invalid Move, pls learn to play");
+    }
+    if(resp.type == "ParticipantMove"){
+        
+        var y = resp.data * 3;
+        document.getElementById(y+1).style.backgroundColor = "white";
+        document.getElementById(y+2).style.backgroundColor = "white";
+        document.getElementById(y+3).style.backgroundColor = "white";
+    }
+    if(resp.type == "CreatorMove"){
+        
+        var y = resp.data * 3;
+        document.getElementById(y+1).style.backgroundColor = "blue";
+        document.getElementById(y+2).style.backgroundColor = "blue";
+        document.getElementById(y+3).style.backgroundColor = "blue";
+    }
+    
+};      
+
+
 function change_color(id) {
-    var x = id;
+    var x = Math.floor((id-1)/3);
+
+    var turn = new Message("turn", x);
+    socket.send(JSON.stringify(turn));
 
     
-
-    if (x%3 == 0){
-        document.getElementById(x).style.backgroundColor = "white";
-        x--;
-        document.getElementById(x).style.backgroundColor = "white";
-        x--;
-        document.getElementById(x).style.backgroundColor = "white";
         
-    }
-    if (x%3 == 1){
-        document.getElementById(x).style.backgroundColor = "white";
-        x++;
-        document.getElementById(x).style.backgroundColor = "white";
-        x++;
-        document.getElementById(x).style.backgroundColor = "white";
-        
-    }
-
-    if (x%3 == 2){
-        document.getElementById(x).style.backgroundColor = "white";
-        x++;
-        document.getElementById(x).style.backgroundColor = "white";
-        x--;
-        x--;
-        document.getElementById(x).style.backgroundColor = "white";
-    }
     
 }
 var endNodes = [1,3,6,10,15,21,28,36,45,55,66,76,85,93,100,106,111,115,118,120,121]
