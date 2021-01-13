@@ -18,7 +18,7 @@ socket.onmessage = function(event){
     if(resp.type == "stop"){
         alert("enemy left game");
     }
-    if(resp.type == "Inavlid Move"){
+    if(resp.type == "Invalid Move"){
         alert("Invalid Move, pls learn to play");
     }
     if(resp.type == "ParticipantMove"){
