@@ -26,6 +26,9 @@ const server = http.createServer(app);
 const wss = new websocket.Server({ server });
 wss.on("connection", function (ws) {
 
+
+
+
     ws.on("message", function incoming(message) {
         message = JSON.parse(message);
         if (message.type == "start") {
@@ -48,9 +51,9 @@ wss.on("connection", function (ws) {
         if (message.type == "turn") {
             if (ws.player.type == "participant") {
                 var x = message.data;
-                console.log("PARTICIPANT");
+                console.log(ws.player.type);
 
-                if (ws.game.allMoves[x] != null) {
+                if (ws.game.allMoves[x] != null || ws.game.move != ws.player.type) {
                     let invalid = new Message("Invalid Move", 0);
                     ws.send(JSON.stringify(invalid));
 
@@ -63,15 +66,16 @@ wss.on("connection", function (ws) {
                     let move = new Message("ParticipantMove", x);
                     ws.game.participant.send(JSON.stringify(move));
                     ws.game.creator.send(JSON.stringify(move));
+                    ws.game.move = "creator";
 
 
                 }
             }
-            else if (ws.player.type == "creator") {
+            else if (ws.player.type == "creator" ) {
 
                 var x = message.data;
-                console.log("CREATOR");
-                if (ws.game.allMoves[x] != null) {
+                console.log(ws.player.type);
+                if (ws.game.allMoves[x] != null || ws.game.move != ws.player.type) {
                     let invalid = new Message("Invalid Move", 0);
                     ws.send(JSON.stringify(invalid));
 
@@ -84,7 +88,7 @@ wss.on("connection", function (ws) {
                     let move = new Message("CreatorMove", x);
                     ws.game.participant.send(JSON.stringify(move));
                     ws.game.creator.send(JSON.stringify(move));
-
+                    ws.game.move = "participant";
 
                 }
 
@@ -143,6 +147,8 @@ function Game(ws) {
         ws.game = this;
     }
 
+
+    
 }
 server.listen(3001);
 
