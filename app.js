@@ -186,3 +186,96 @@ var boardValues = {
                                                                                                     121:"K11"
 
 }
+
+function findNeighbors(id){
+    
+    var ret = [];
+    var original = boardValues[id];
+    var letter = original.substr(0,1);
+    
+    var number = Number(original.substr(1,2));
+    
+    var prevletter = prevLetter(letter);
+    var prevletter2 = prevletter;
+    
+    var prevletter = prevletter + number;
+    var prevletter2 = prevletter2 + (number+1);
+    
+    var nextletter = nextLetter(letter);
+    var nextletter2 = nextletter;
+    
+    var nextletter = nextletter + number;
+    var nextletter2 = nextletter2 + (number-1);
+    
+    var sameletter = letter;
+    var sameletter2 = letter;
+    
+    var sameletter = sameletter + (number-1);
+    var sameletter2 = sameletter2 + (number+1);
+    
+    if(!prevletter.includes("Z")){
+        var keyToFind = prevletter;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+    if(!prevletter2.includes("Z") && !prevletter2.includes("12")){
+        var keyToFind = prevletter2;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+    if(!nextletter.includes("L")){
+        var keyToFind = nextletter;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+    if((!nextletter2.includes("L") && !nextletter2.includes("0")) || (!nextletter2.includes("L") && nextletter2.includes("10"))){
+        var keyToFind = nextletter2;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+    if(!sameletter.includes("0") || sameletter.includes("10")){
+        var keyToFind = sameletter;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+    if(!sameletter2.includes("12")){
+        var keyToFind = sameletter2;
+        for(var i in boardValues){
+            if(boardValues[i].includes(keyToFind)){
+            var j = i;    
+            break; 
+            }
+        }
+      ret.push(j);
+    }
+  
+    
+    
+    
+    return ret;
+}
