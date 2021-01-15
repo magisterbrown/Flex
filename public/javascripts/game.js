@@ -99,8 +99,6 @@ function nextLetter(letter) {
 
 
 
-
-
 var i;
 var j = 1;
 for(i = 0; i < 121; i++){

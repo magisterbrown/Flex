@@ -61,8 +61,12 @@ wss.on("connection", function (ws) {
 
                 }
                 else {
-                    var curHex = new Hex("participant", x);
-                    ws.game.allMoves[x] = curHex;
+                    //var curHex = new Hex("participant", x);
+                    var curHex = new Hex("participant", x+1);
+
+                    //ws.game.allMoves[x] = curHex;
+                    ws.game.allMoves[x+1] = curHex;
+
                     let move = new Message("ParticipantMove", x);
                     ws.game.participant.send(JSON.stringify(move));
                     ws.game.creator.send(JSON.stringify(move));
@@ -83,8 +87,20 @@ wss.on("connection", function (ws) {
 
                 }
                 else {
-                    var curHex = new Hex("creator", x);
-                    ws.game.allMoves[x] = curHex;
+                    //var curHex = new Hex("creator", x);
+                    var curHex = new Hex("creator", x+1);
+
+                    //ws.game.allMoves[x] = curHex;
+                    ws.game.allMoves[x+1] = curHex;
+
+
+                    //
+                    if (check_victory(x+1, "creator") > 0){
+                        console.log("creator wins!");
+                    }
+
+
+
                     let move = new Message("CreatorMove", x);
                     ws.game.participant.send(JSON.stringify(move));
                     ws.game.creator.send(JSON.stringify(move));
@@ -161,7 +177,43 @@ function Hex(player, id) {
 
 }
 
+var ParticipatorEdgeMoves1 = [1,2,3,4,7,11,16,22,29,37,46,56,66];
+var ParticipatorEdgeMoves2 = [76,85,93,100,106,111,115,118,120,121];
+var CreatorEdgeMoves1 =      [1,3,6,10,15,21,28,36,45,55,66];
+var CreatorEdgeMoves2 =      [56,67,77,86,94,101,107,112,116,119,121];
 
+function check_victory(id, player, already_checked = [], count1 = 0, count2 = 0, sum = 0){
+    
+    if(already_checked.includes(id)){
+        return 0;
+    }
+    already_checked.push(id);
+    if(ParticipatorEdgeMoves1.includes(id) && player == "participator"){
+        count1++;
+    }
+    if(ParticipatorEdgeMoves2.includes(id) && player == "participator"){
+        count2++;
+    }
+    if(CreatorEdgeMoves1.includes(id) && player == "creator"){
+        count1++;
+    }
+    if(CreatorEdgeMoves2.includes(id) && player == "creator"){
+        count2++;
+    }
+    // break condition
+    if (count1+count2 == 2){
+        return 1;
+    }
+
+    var arr = findNeighbors(id);
+    for(var i = 0; i < arr.length; i++){
+        if(ws.game.allMoves[arr[i]] != null && ws.game.allMoves[arr[i]].state == player){
+            already_checked.push(arr[i])
+            return sum + check_victory(arr[i], player);
+        }
+    }
+    
+}
 var boardValues = {
     1: "A1", 
     2: "B1", 3: "A2", 
@@ -185,6 +237,17 @@ var boardValues = {
                                                                                          119:"K10", 120:"J11",
                                                                                                     121:"K11"
 
+}
+function prevLetter(letter) {
+    if (letter === 'a'){ return 'z'; }
+    if (letter === 'A'){ return 'Z'; }
+    return String.fromCharCode(letter.charCodeAt(0) - 1);
+}
+
+function nextLetter(letter) {
+    if (letter === 'z'){ return 'a'; }
+    if (letter === 'Z'){ return 'A'; }
+    return String.fromCharCode(letter.charCodeAt(0) + 1);
 }
 
 function findNeighbors(id){
