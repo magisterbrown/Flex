@@ -48,12 +48,11 @@ wss.on("connection", function (ws) {
             sendActive(wss, websocket, mess);
         }
 
-        if (message.type == "turn") {
+        if (message.type == "turn" && ws.game!=null) {
             if (ws.player.type == "participant") {
                 var x = message.data;
-                console.log(ws.player.type);
 
-                if (ws.game.allMoves[x] != null || ws.game.move != ws.player.type) {
+                if (ws.game.allMoves[x+1] != null || ws.game.move != ws.player.type) {
                     let invalid = new Message("Invalid Move", 0);
                     ws.send(JSON.stringify(invalid));
 
@@ -75,11 +74,10 @@ wss.on("connection", function (ws) {
 
                 }
             }
-            else if (ws.player.type == "creator" ) {
+            else if (ws.player.type == "creator" && ws.game !=null ) {
 
                 var x = message.data;
-                console.log(ws.player.type);
-                if (ws.game.allMoves[x] != null || ws.game.move != ws.player.type) {
+                if (ws.game.allMoves[x+1] != null || ws.game.move != ws.player.type) {
                     let invalid = new Message("Invalid Move", 0);
                     ws.send(JSON.stringify(invalid));
 
@@ -93,9 +91,7 @@ wss.on("connection", function (ws) {
                     //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
 
-
-                    //
-                    if (check_victory(x+1, "creator") > 0){
+                    if (check_victory(x+1, "creator",ws) > 0){
                         console.log("creator wins!");
                     }
 
@@ -182,7 +178,7 @@ var ParticipatorEdgeMoves2 = [76,85,93,100,106,111,115,118,120,121];
 var CreatorEdgeMoves1 =      [1,3,6,10,15,21,28,36,45,55,66];
 var CreatorEdgeMoves2 =      [56,67,77,86,94,101,107,112,116,119,121];
 
-function check_victory(id, player, already_checked = [], count1 = 0, count2 = 0, sum = 0){
+function check_victory(id, player,ws, already_checked = [], count1 = 0, count2 = 0, sum = 0){
     
     if(already_checked.includes(id)){
         return 0;
@@ -209,7 +205,7 @@ function check_victory(id, player, already_checked = [], count1 = 0, count2 = 0,
     for(var i = 0; i < arr.length; i++){
         if(ws.game.allMoves[arr[i]] != null && ws.game.allMoves[arr[i]].state == player){
             already_checked.push(arr[i])
-            return sum + check_victory(arr[i], player);
+            return sum + check_victory(arr[i], player,ws,already_checked);
         }
     }
     
