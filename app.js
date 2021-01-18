@@ -66,6 +66,10 @@ wss.on("connection", function (ws) {
                     //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
 
+                    if (check_victory(x+1, "participant",ws) > 0){
+                        console.log("participant wins!");
+                    }
+
                     let move = new Message("ParticipantMove", x);
                     ws.game.participant.send(JSON.stringify(move));
                     ws.game.creator.send(JSON.stringify(move));
@@ -178,37 +182,51 @@ var ParticipatorEdgeMoves2 = [76,85,93,100,106,111,115,118,120,121];
 var CreatorEdgeMoves1 =      [1,3,6,10,15,21,28,36,45,55,66];
 var CreatorEdgeMoves2 =      [56,67,77,86,94,101,107,112,116,119,121];
 
-function check_victory(id, player,ws, already_checked = [], count1 = 0, count2 = 0, sum = 0){
-    
-    if(already_checked.includes(id)){
+function check_victory(id, player, ws, already_checked = [], count1 = 0, count2 = 0, sum = 0) {
+    console.log("The current player is: " + player + " \n");
+    console.log("The id of this piece is: " + id + " \n");
+    console.log("The pieces that have already been checked are: " + already_checked);
+
+    if (already_checked.includes(id)) {
+        console.log("ALREADY CHECKED");
         return 0;
     }
-    already_checked.push(id);
-    if(ParticipatorEdgeMoves1.includes(id) && player == "participator"){
-        count1++;
-    }
-    if(ParticipatorEdgeMoves2.includes(id) && player == "participator"){
-        count2++;
-    }
-    if(CreatorEdgeMoves1.includes(id) && player == "creator"){
-        count1++;
-    }
-    if(CreatorEdgeMoves2.includes(id) && player == "creator"){
-        count2++;
-    }
-    // break condition
-    if (count1+count2 == 2){
-        return 1;
-    }
+    else {
+        already_checked.push(id);
 
-    var arr = findNeighbors(id);
-    for(var i = 0; i < arr.length; i++){
-        if(ws.game.allMoves[arr[i]] != null && ws.game.allMoves[arr[i]].state == player){
-            already_checked.push(arr[i])
-            return sum + check_victory(arr[i], player,ws,already_checked);
+
+
+
+        if (ParticipatorEdgeMoves1.includes(id) && player == "participator") {
+            count1++;
+        }
+        if (ParticipatorEdgeMoves2.includes(id) && player == "participator") {
+            count2++;
+        }
+        if (CreatorEdgeMoves1.includes(id) && player == "creator") {
+            count1++;
+        }
+        if (CreatorEdgeMoves2.includes(id) && player == "creator") {
+            count2++;
+        }
+        // break condition
+        if (count1 + count2 == 2) {
+            return 1;
+        }
+
+        var arr = findNeighbors(id);
+        var good_neighbors = [];
+        console.log("This pieces neighbors are: " + arr + "\n");
+        for (var i = 0; i < arr.length; i++) {
+            if (ws.game.allMoves[arr[i]] != null && ws.game.allMoves[arr[i]].state == player) {
+
+                console.log("The neighboring peice:" + arr[i] + " is of the same color");
+
+                return sum + check_victory(arr[i], player, ws, already_checked, count1, count2);
+            }
+            console.log("The neighboring peice:" + arr[i] + " is NOT of the same color");
         }
     }
-    
 }
 var boardValues = {
     1: "A1", 
