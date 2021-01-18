@@ -66,7 +66,7 @@ wss.on("connection", function (ws) {
                     //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
 
-                    if (check_victory(x+1, "participant",ws) > 0){
+                    if (check_victory(x+1, ws, "participant") > 0){
                         console.log("participant wins!");
                     }
 
@@ -95,7 +95,7 @@ wss.on("connection", function (ws) {
                     //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
 
-                    if (check_victory(x+1, "creator",ws) > 0){
+                    if (check_victory(x+1, ws, "creator") > 0){
                         console.log("creator wins!");
                     }
 
@@ -177,56 +177,77 @@ function Hex(player, id) {
 
 }
 
-var ParticipatorEdgeMoves1 = [1,2,3,4,7,11,16,22,29,37,46,56,66];
-var ParticipatorEdgeMoves2 = [76,85,93,100,106,111,115,118,120,121];
+var ParticipatorEdgeMoves1 = [1,2,4,7,11,16,22,29,37,46,56];
+var ParticipatorEdgeMoves2 = [66,76,85,93,100,106,111,115,118,120,121];
 var CreatorEdgeMoves1 =      [1,3,6,10,15,21,28,36,45,55,66];
 var CreatorEdgeMoves2 =      [56,67,77,86,94,101,107,112,116,119,121];
 
-function check_victory(id, player, ws, already_checked = [], count1 = 0, count2 = 0, sum = 0) {
-    console.log("The current player is: " + player + " \n");
-    console.log("The id of this piece is: " + id + " \n");
-    console.log("The pieces that have already been checked are: " + already_checked);
-
-    if (already_checked.includes(id)) {
-        console.log("ALREADY CHECKED");
-        return 0;
-    }
-    else {
-        already_checked.push(id);
-
-
-
-
-        if (ParticipatorEdgeMoves1.includes(id) && player == "participator") {
-            count1++;
-        }
-        if (ParticipatorEdgeMoves2.includes(id) && player == "participator") {
-            count2++;
-        }
-        if (CreatorEdgeMoves1.includes(id) && player == "creator") {
-            count1++;
-        }
-        if (CreatorEdgeMoves2.includes(id) && player == "creator") {
-            count2++;
-        }
-        // break condition
-        if (count1 + count2 == 2) {
-            return 1;
-        }
-
-        var arr = findNeighbors(id);
-        var good_neighbors = [];
-        console.log("This pieces neighbors are: " + arr + "\n");
-        for (var i = 0; i < arr.length; i++) {
-            if (ws.game.allMoves[arr[i]] != null && ws.game.allMoves[arr[i]].state == player) {
-
-                console.log("The neighboring peice:" + arr[i] + " is of the same color");
-
-                return sum + check_victory(arr[i], player, ws, already_checked, count1, count2);
+function check_victory(id, ws, player) {
+    sum_participant = 0;    
+    sum_creator = 0;     // victory conditions
+    var arr = [id.toString()];        // list of all moves
+    var already_checked = [];
+    var i = 0;
+    var length_before;
+    while (true){
+        console.log("CURRENT ID IS: " + arr[i] + "\n");
+        var neighbors = findNeighbors(arr[i]); // find neighbors of the hex_id at position i
+        i++; // go to next element in queue
+        length_before = arr.length; // store number of elements before for stopping condition
+        for(var j = 0; j < neighbors.length; j++){ // loop through all neighbors
+            if(ws.game.allMoves[neighbors[j]] != null // if the move has been played
+                && ws.game.allMoves[neighbors[j]].state == player
+                && !arr.includes(neighbors[j])){ //if the move has been played by the player in question
+                
+                arr.push(neighbors[j]); //push id to good_neighbors
             }
-            console.log("The neighboring peice:" + arr[i] + " is NOT of the same color");
         }
+        console.log(arr);
+
+        if(arr.length == length_before
+            && arr.length == i){
+            console.log("LOOP TERMINATED");
+            break; // end loop if no victory
+        }
+        
+        if(player == "creator"){
+            var sum = false;
+            var sum2 = false;
+            for(var z = 0; z<11; z++){
+                if(arr.includes(CreatorEdgeMoves1[z].toString())){
+                    sum = true;
+                }
+                if(arr.includes(CreatorEdgeMoves2[z].toString())){
+                    sum2 = true;
+                }
+            }
+            if(sum && sum2){
+                return true;
+            }
+        }
+
+        if(player == "participant"){
+            var sum = false;
+            var sum2 = false;
+            for(var z = 0; z < 11; z++){
+                if(arr.includes(ParticipatorEdgeMoves1[z].toString())){
+                    sum = true;
+                }
+                if(arr.includes(ParticipatorEdgeMoves2[z].toString())){
+                    sum2 = true;
+                }
+            }
+            if(sum && sum2){
+                return true;
+            }
+        }
+
+
+
+
     }
+    console.log("lost");
+    return false;
 }
 var boardValues = {
     1: "A1", 
@@ -356,3 +377,4 @@ function findNeighbors(id){
     
     return ret;
 }
+
