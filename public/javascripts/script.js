@@ -98,7 +98,10 @@ socket.onopen = function(event){
     }
 socket.onmessage = function(event){
     let resp = JSON.parse(event.data);
-    if(resp.type = "active"){
+    if(resp.type == "active"){
         games.innerHTML = resp.data;
+    }
+    if(resp.type == "completed"){
+        completed.innerHTML = resp.data;
     }
 };        

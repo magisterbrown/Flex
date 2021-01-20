@@ -15,10 +15,10 @@ body {
 }
 
 .intro {
-  text-align: center;
-  font-family: monospace;
-  font-size: 100px;
-  color: #2f95c5;
+    text-align: center;
+    font-family: monospace;
+    font-size: 100px;
+    color: #2f95c5;
 }
 
 .space {
@@ -43,14 +43,14 @@ body {
 .hex4{
     display: inline-block;
     width: 4px;
-  height: 0px;
-  margin: 0 auto;
-  position: relative;
-  margin-top: calc(140/100*var(--hexagon_s));
-  margin-left:calc(1.632*var(--hexagon_s));
-  
-  
-  
+    height: 0px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: calc(140/100*var(--hexagon_s));
+    margin-left:calc(1.632*var(--hexagon_s));
+
+
+
 }
 .h1 {
     top: var(--position_y);
@@ -61,31 +61,55 @@ body {
     position: absolute;
     cursor: pointer;
     transform: rotate(30deg);
-    
-  }
-  
-  .h2 {
+
+}
+
+.h2 {
     top: var(--position_y);
     left: var(--position_x);
     position: absolute;
     width: var(--hexagon_s);
     height: calc(1.732*var(--hexagon_s));
     background-color: rgb(255,0,0);
-    
+
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     cursor: pointer;
-  }
-  
-  .h3 {
+}
+
+.h3 {
     top: var(--position_y);
     left: var(--position_x);
     position: absolute;
     width: var(--hexagon_s);
     height: calc(1.732*var(--hexagon_s));
-    
+
     background-color:rgb(255,0,0); 
     transform: rotate(-30deg);
     -webkit-transform: rotate(-30deg);
     cursor: pointer;
-  }
+}
+.square{
+    position: absolute;
+    width:20px;
+    height:20px;
+    transform:translate(-50%,0);
+}
+.white{
+    background:#FFF;
+}
+.blue{
+    background:#00F;
+}
+.left{
+    left:calc(50% - 150px);
+}
+.right{
+    left:calc(50% + 150px);
+}
+.top{
+    top:150px;
+}
+.bot{
+    top:500px
+}
