@@ -53,7 +53,7 @@ wss.on("connection", function (ws) {
             sendActive(wss, websocket, mess);
         }
 
-        if (message.type == "turn" && ws.game!=null && ws.game.active(websocket)) {
+        if (message.type == "turn" && ws.game!=null) {
             if (ws.player.type == "participant") {
                 var x = message.data;
 
@@ -65,15 +65,12 @@ wss.on("connection", function (ws) {
 
                 }
                 else {
+                    //var curHex = new Hex("participant", x);
                     var curHex = new Hex("participant", x+1);
 
+                    //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
 
-
-                    let move = new Message("ParticipantMove", x);
-                    ws.game.participant.send(JSON.stringify(move));
-                    ws.game.creator.send(JSON.stringify(move));
-                    ws.game.move = "creator";
                     if (check_victory(x+1, ws, "participant") > 0){
                         console.log("participant wins!");
                         ws.game.participant.send(JSON.stringify(messWin));
@@ -81,9 +78,12 @@ wss.on("connection", function (ws) {
                         completed++;
                         messCompl.data = completed;
                         sendActive(wss, websocket,messCompl);
-                        ws.game.participant.close();
-                        ws.game.creator.close();
                     }
+
+                    let move = new Message("ParticipantMove", x);
+                    ws.game.participant.send(JSON.stringify(move));
+                    ws.game.creator.send(JSON.stringify(move));
+                    ws.game.move = "creator";
 
 
                 }
@@ -99,17 +99,11 @@ wss.on("connection", function (ws) {
 
                 }
                 else {
+                    //var curHex = new Hex("creator", x);
                     var curHex = new Hex("creator", x+1);
 
+                    //ws.game.allMoves[x] = curHex;
                     ws.game.allMoves[x+1] = curHex;
-
-
-
-
-                    let move = new Message("CreatorMove", x);
-                    ws.game.participant.send(JSON.stringify(move));
-                    ws.game.creator.send(JSON.stringify(move));
-                    ws.game.move = "participant";
 
                     if (check_victory(x+1, ws, "creator") > 0){
                         console.log("creator wins!");
@@ -118,15 +112,22 @@ wss.on("connection", function (ws) {
                         completed++;
                         messCompl.data = completed;
                         sendActive(wss, websocket,messCompl);
-                        ws.game.participant.close();
-                        ws.game.creator.close();
                     }
+
+
+
+                    let move = new Message("CreatorMove", x);
+                    ws.game.participant.send(JSON.stringify(move));
+                    ws.game.creator.send(JSON.stringify(move));
+                    ws.game.move = "participant";
+
                 }
 
             }
         }
         if (message.type == "currgames") {
             let mass = new Message("active", active);
+            mass.completed = completed;
             ws.send(JSON.stringify(mass));
             messCompl.data = completed;
             ws.send(JSON.stringify(messCompl));
@@ -178,12 +179,6 @@ wss.on("connection", function (ws) {
         this.addPlayer = function (ws) {
             this.participant = ws;
             ws.game = this;
-        }
-        this.active = function (WebSocket){
-            if(this.creator.readyState == WebSocket.OPEN && this.participant!=null && this.participant.readyState == WebSocket.OPEN){
-                return true
-            }
-            return false;
         }
 
 
@@ -284,7 +279,7 @@ var boardValues = {
     37:"I1", 38:"H2", 39:"G3", 40:"F4", 41:"E5", 42: "D6", 43: "C7", 44: "B8", 45: "A9",
     46:"J1", 47:"I2", 48:"H3", 49:"G4", 50:"F5", 51: "E6", 52: "D7", 53: "C8", 54: "B9", 55: "A10",
     56:"K1", 57:"J2", 58:"I3", 59:"H4", 60:"G5", 61: "F6", 62: "E7", 63: "D8", 64: "C9", 65: "B10", 66: "A11",
-    67:"K2", 69:"J3", 70:"I4", 71:"H5", 72: "G6", 73: "F7", 74: "E8", 75: "D9", 76: "C10", 76: "B11",
+    67:"K2", 68:"J3", 69:"I4", 70:"H5", 71: "G6", 72: "F7", 73: "E8", 74: "D9", 75: "C10", 76: "B11",
     77:"K3", 78:"J4", 79:"I5", 80: "H6", 81: "G7", 82: "F8", 83: "E9", 84: "D10", 85: "C11",
     86:"K4", 87:"J5", 88: "I6", 89: "H7", 90: "G8", 91: "F9", 92: "E10", 93: "D11", 
     94:"K5", 95: "J6", 96: "I7", 97: "H8", 98: "G9", 99: "F10", 100:"E11",
