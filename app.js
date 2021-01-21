@@ -53,7 +53,7 @@ wss.on("connection", function (ws) {
             sendActive(wss, websocket, mess);
         }
 
-        if (message.type == "turn" && ws.game!=null) {
+        if (message.type == "turn" && ws.game!=null && ws.game.active()) {
             if (ws.player.type == "participant") {
                 var x = message.data;
 
