@@ -53,7 +53,7 @@ wss.on("connection", function (ws) {
             sendActive(wss, websocket, mess);
         }
 
-        if (message.type == "turn" && ws.game!=null && ws.game.active()) {
+        if (message.type == "turn" && ws.game!=null && ws.game.active(websocket)) {
             if (ws.player.type == "participant") {
                 var x = message.data;
 
@@ -181,7 +181,7 @@ wss.on("connection", function (ws) {
             ws.game = this;
         }
         this.active = function(WebSocket){
-            if(ws.creator.readyState == WebSocket.OPEN && ws.participant !=null && ws.participant.readyState == WebSocket.OPEN){
+            if(this.creator.readyState == WebSocket.OPEN && this.participant !=null && this.participant.readyState == WebSocket.OPEN){
                 return true;
             }
             return false;
