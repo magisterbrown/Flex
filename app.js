@@ -88,7 +88,7 @@ wss.on("connection", function (ws) {
 
                 }
             }
-            else if (ws.player.type == "creator" && ws.game !=null ) {
+            else if (ws.player.type == "creator" && ws.game !=null && ws.game.active(websocket)) {
 
                 var x = message.data;
                 if (ws.game.allMoves[x+1] != null || ws.game.move != ws.player.type) {
@@ -180,6 +180,13 @@ wss.on("connection", function (ws) {
             this.participant = ws;
             ws.game = this;
         }
+        this.active = function(WebSocket){
+            if(ws.creator.readyState == WebSocket.OPEN && ws.participant !=null && ws.participant.readyState == WebSocket.OPEN){
+                return true;
+            }
+            return false;
+        }
+
 
 
 
