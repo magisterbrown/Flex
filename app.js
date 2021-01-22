@@ -215,7 +215,7 @@ wss.on("connection", function (ws) {
         var i = 0;
         var length_before;
         while (true){
-            console.log("CURRENT ID IS: " + arr[i] + "\n");
+            
             var neighbors = findNeighbors(arr[i]); // find neighbors of the hex_id at position i
             i++; // go to next element in queue
             length_before = arr.length; // store number of elements before for stopping condition
@@ -227,11 +227,11 @@ wss.on("connection", function (ws) {
                     arr.push(neighbors[j]); //push id to good_neighbors
                 }
             }
-            console.log(arr);
+            
 
             if(arr.length == length_before
                 && arr.length == i){
-                console.log("LOOP TERMINATED");
+                
                 break; // end loop if no victory
             }
 
@@ -271,7 +271,7 @@ wss.on("connection", function (ws) {
 
 
         }
-        console.log("lost");
+        
         return false;
     }
 var boardValues = {
